@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <title>Delete Component</title>
+</head>
+<body>
+    <div id="back">
+        <a href="home.html">Home</a>
+    </div>
+    <h1>Delete Component</h1>
+    <form id="deleteForm">
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="id" required>
+
+        <button type="submit">Delete</button> <br>
+    </form>
+</body>
+<script>
+    document.getElementById("deleteForm").addEventListener("submit", function (event){
+        event.preventDefault();
+
+        var id = document.getElementById("id").value;
+
+        fetch(`/delete/${id}`,{
+            method: 'delete'
+        })
+        .then(response => response.json())
+        .then(jsonData => {
+            alert(jsonData.message);
+        })
+    })
+</script>
+</html>

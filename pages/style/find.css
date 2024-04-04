@@ -1,0 +1,63 @@
+body {
+    max-width: 1000px;
+    margin: auto;
+    background-color: #f2f3f7;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    border: 1.2px solid #dddddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #bebebe;
+    text-align: center;
+}
+
+.search-container,
+.tableProduct {
+    background-color: white;
+    padding: 20px;
+}
+
+.search-container {
+    max-width: 1200px;
+    margin: 20px 0;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+.search-container input {
+    width: 250px;
+}
+
+.search-container input[type=text],
+.search-container select {
+    width: 100%;
+    padding: 6px;
+    margin: 5px 0 10px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.search-container button {
+    padding: 6px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background-color: #45a049;
+}

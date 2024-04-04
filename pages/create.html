@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <title>Create Component</title>
+</head>
+
+<body onload="setFocus()">
+    <div id="back">
+        <a href="home.html">Home</a>
+    </div>
+    <h1>Create Component</h1>
+    <form id="formInfo">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="supplier">Supplier:</label>
+        <input type="text" id="supplier" name="supplier" required><br><br>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" required><br><br>
+
+        <label for="unit">Unit on Stock:</label>
+        <input type="number" id="unit" name="unit" required><br><br>
+
+        <button type="button" onclick="addComp()">Add</button><br>
+        <div id="message" style="width: 5.76cm;"></div><br>
+        <button type="button" onclick="submitComps()">Submit</button><br><br>
+
+    </form>
+</body>
+<script>
+    var componentAray = [];
+    function addComp() {
+        var n = document.getElementById("name").value;
+        var s = document.getElementById("supplier").value;
+        var p = document.getElementById("price").value;
+        var u = document.getElementById("unit").value;
+        var comp = { name: n, supplier: s, price: p, unit: u };
+
+        componentAray.push(comp);
+        ouputMessage(`New component [${n}] is added`);
+    }
+    function submitComps() {
+        fetch('/insert', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(componentAray)
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                resetForm();
+            })
+            .catch(err => {
+                console.error(`Error: ${err}`);
+            });
+    }
+    // function alertComponents(components) {
+    //     let alertMessage = '';
+    //     components.forEach(component => {
+    //         alertMessage = `Name: ${component.name}, Supplier: ${component.supplier}, Price: ${component.price}, Unit: ${component.unit}\n`;
+    //     });
+    //     alert(alertMessage);
+    // }
+    function ouputMessage(message) {
+        var messageElement = document.getElementById('message');
+        messageElement.textContent = message;
+    }
+    function resetForm() {
+        document.getElementById("formInfo").reset();
+        // document.getElementById("message").textContent = '';
+        setFocus();
+        components = [];
+    }
+    function setFocus() {
+        document.getElementById("name").focus();
+    }
+</script>
+
+</html>
