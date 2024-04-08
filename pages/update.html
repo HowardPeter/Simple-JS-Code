@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style/style.css">
     <title>Update Component</title>
 </head>
+
 <body>
     <div id="back">
         <a href="home.html">Home</a>
@@ -14,7 +15,7 @@
     <h1>Update Component</h1>
     <form id="updateForm">
         <label for="id">ID:</label>
-        <input type="text" id="id" name="id" required><br><br>
+        <input type="text" id="id" name="id" readonly><br><br>
 
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required><br><br>
@@ -28,34 +29,38 @@
         <label for="unit">Unit on Stock:</label>
         <input type="number" id="unit" name="unit" required><br><br><br>
 
-        <button type="submit">Update</button>
+        <button type="button" onclick="updateComp()">Update</button>
     </form>
 </body>
 <script>
-    document.getElementById("updateForm").addEventListener("submit", function (event) {
-        event.preventDefault();
+    const queryParams = new URLSearchParams(window.location.search);
+    const oldComp = Object.fromEntries(queryParams.entries());
+    let newComp = oldComp;
 
-        var id = document.getElementById("id").value;
-        var name = document.getElementById("name").value;
-        var supplier = document.getElementById("supplier").value;
-        var price = document.getElementById("price").value;
-        var unit = document.getElementById("unit").value;
-        const data = { name: name, supplier: supplier, price: price, unit: unit };
+    document.getElementById('id').value = oldComp.id;
+    document.getElementById('name').value = oldComp.name;
+    document.getElementById('supplier').value = oldComp.supplier;
+    document.getElementById('price').value = oldComp.price;
+    document.getElementById('unit').value = oldComp.unitonstock;
 
-        fetch(`/update/${id}`, {
-            method: "put",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
+    function updateComp() {
+        newComp.name = document.getElementById('name').value;
+        newComp.supplier = document.getElementById('supplier').value;
+        newComp.price = document.getElementById('price').value;
+        newComp.unitonstock = document.getElementById('unit').value;
+
+        fetch('/update', {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newComp)
         })
-            .then(res => res.json())
+            .then(response => response.json())
             .then(data => alert(data.message))
             .catch(error => {
                 console.error(error);
                 alert('An error occurred!');
             });
-    });
+    }
 </script>
 
 </html>

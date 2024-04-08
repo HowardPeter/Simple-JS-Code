@@ -7,9 +7,11 @@ const collectionComp = 'computer_components';
 
 const express = require('express')
 const bodyParser = require('body-parser')
+const path = require('path');
+const queryString = require('querystring')
 const app = express()
-const path = require('path')
 const port = 3000
+let compsCollection;
 
 app.use(express.static(path.join(__dirname, '/pages')));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -68,7 +70,7 @@ app.post('/insert', async (req, res) => {
     try {
         await client.connect();
 
-        const compsCollection = client.db(myDB).collection(collectionComp);
+        compsCollection = client.db(myDB).collection(collectionComp);
         // const newID = getNewID(components);
         const newComps = req.body;
 
@@ -93,7 +95,7 @@ app.get('/read', async (req, res) => {
         const query = {};
 
         await client.connect();
-        const compsCollection = client.db(myDB).collection(collectionComp);
+        compsCollection = client.db(myDB).collection(collectionComp);
 
         if (find_name) {
             query.name = { $regex: find_name, $options: 'i' };
@@ -121,22 +123,39 @@ app.get('/read', async (req, res) => {
     }
 })
 
-app.get('/update/:id', async (req, res) => {
-    update_id = req.params.id
+app.get('/read/update', async (req, res) => {
+    const id = req.query.id;
+    const name = req.query.name;
+    const sup = req.query.supplier;
+    const query = { id: { $regex: id, $options: 'i' } }
     try {
         await client.connect();
+        compsCollection = client.db(myDB).collection(collectionComp);
 
-        const compsCollection = client.db(myDB).collection(collectionComp);
-        const updatedValue = {
-            $set: {
-                name: "New Name",
-                supplier: "New Supplier",
-                price: 500,
-                unitonstock: 50
-            }
-        };
-        await compsCollection.updateOne({ id: update_id }, updatedValue);
-        res.send(`Component with ID ${update_id} updated successfully.`);
+        editComp = await compsCollection.findOne(query);
+
+        const queryParams = queryString.stringify(editComp);
+        res.redirect(`/pages/update.html?${queryParams}`);
+    }
+    catch (error) {
+        res.send(error)
+    } finally {
+        await client.close()
+    }
+})
+
+app.get('/update', async (req, res) => {
+    try {
+        await client.connect();
+        compsCollection = client.db(myDB).collection(collectionComp);
+
+        const newComp = req.body;
+        const update_id = newComp.id;
+        const updateQuery = { $set: { name: newComp.name, supplier: newComp.supplier, price: newComp.price, unitonstock: newComp.unitonstock } }
+
+        await compsCollection.updateOne({ id: update_id }, updateQuery);
+        const message = `Component with ID ${update_id} updated successfully.`
+        res.json({message: message});
     } catch (error) {
         res.send(error)
     }
@@ -151,7 +170,7 @@ app.get('/delete/:name', async (req, res) => {
     try {
         await client.connect();
 
-        const compsCollection = client.db(myDB).collection(collectionComp);
+        compsCollection = client.db(myDB).collection(collectionComp);
         await compsCollection.deleteMany({ name: delete_name });
 
         res.send(`Component ${componentName} has been deleted successfully.`);
