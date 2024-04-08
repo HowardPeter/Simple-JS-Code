@@ -4,69 +4,79 @@
         "name": "Intel Core I7",
         "supplier": "Intel",
         "price": 250,
-        "unitonstock": 25
+        "unitonstock": 25,
+        "image": "/public/images/download.jpg"
     },
     {
         "id": "COMP0122",
         "name": "AMD Ryzen 5",
         "supplier": "AMD",
         "price": 200,
-        "unitonstock": 20
+        "unitonstock": 20,
+        "image": "/public/images/download(1).jpg"
     },
     {
         "id": "COMP0123",
         "name": "NVIDIA GeForce GTX 1660",
         "supplier": "NVIDIA",
         "price": 300,
-        "unitonstock": 15
+        "unitonstock": 15,
+        "image": "/public/images/download(2).jpg"
     },
     {
         "id": "COMP0124",
         "name": "Corsair Vengeance LPX 16GB RAM",
         "supplier": "Corsair",
         "price": 80,
-        "unitonstock": 30
+        "unitonstock": 30,
+        "image": "/public/images/download(3).jpg"
     },
     {
         "id": "COMP0125",
         "name": "Samsung 1TB SSD",
         "supplier": "Samsung",
         "price": 150,
-        "unitonstock": 10
+        "unitonstock": 10,
+        "image": "/public/images/download(4).jpg"
     },
     {
         "id": "COMP0126",
         "name": "Asus ROG Strix B450-F Motherboard",
         "supplier": "Asus",
         "price": 120,
-        "unitonstock": 18
+        "unitonstock": 18,
+        "image": "/public/images/download(5).jpg"
     },
     {
         "id": "COMP0127",
         "name": "Seagate Barracuda 2TB HDD",
         "supplier": "Seagate",
         "price": 70,
-        "unitonstock": 22
+        "unitonstock": 22,
+        "image": "/public/images/download(6).jpg"
     },
     {
         "id": "COMP0128",
         "name": "Cooler Master Hyper 212 RGB CPU Cooler",
         "supplier": "Cooler Master",
         "price": 50,
-        "unitonstock": 25
+        "unitonstock": 25,
+        "image": "/public/images/download(7).jpg"
     },
     {
         "id": "COMP0129",
         "name": "EVGA 750W 80+ Gold Power Supply",
         "supplier": "EVGA",
         "price": 100,
-        "unitonstock": 12
+        "unitonstock": 12,
+        "image": "/public/images/download(8).jpg"
     },
     {
         "id": "COMP0130",
         "name": "Logitech G Pro Mechanical Gaming Keyboard",
         "supplier": "Logitech",
         "price": 120,
-        "unitonstock": 15
+        "unitonstock": 15,
+        "image": "/public/images/download(9).jpg"
     }
 ]

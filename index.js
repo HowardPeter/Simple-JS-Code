@@ -32,13 +32,14 @@ function outputComponents(computer_components) {
                         }
                     </style>`
     htmlTable += '<table border="1">';
-    htmlTable += '<tr><th>ID</th><th>Name</th><th>Supplier</th><th>Price</th><th>Units on Stock</th></tr>';
+    htmlTable += '<tr><th>ID</th><th>Name</th><th>Supplier</th><th>Price</th><th>Units on Stock</th><th>Image</th></tr>';
     computer_components.forEach(component => {
         htmlTable += `<tr><td style="text-align: center;">${component.id}</td>
                         <td>${component.name}</td>
                         <td>${component.supplier}</td>
                         <td style="text-align: center;">${component.price}$</td>
                         <td style="text-align: center;">${component.unitonstock}</td>
+                        <td style="text-align: center;"><img src="/${component.image}" alt="" width = 80px></td>
                     </tr>`;
     });
     htmlTable += '</table>'
