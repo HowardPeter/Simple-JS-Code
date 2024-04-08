@@ -8,7 +8,8 @@ const collectionComp = 'computer_components';
 const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path');
-const queryString = require('querystring')
+const queryString = require('querystring');
+const { table } = require('console');
 const app = express()
 const port = 3000
 let compsCollection;
@@ -114,7 +115,7 @@ app.get('/read', async (req, res) => {
         }
         const result = await compsCollection.find(query).toArray();
         const htmlTable = outputComponents(result);
-        res.send(htmlTable);
+        res.json({table: htmlTable});
     } catch (error) {
         res.send(error)
     }
@@ -145,8 +146,15 @@ app.get('/read/update', async (req, res) => {
 
         editComp = await compsCollection.findOne(query);
 
-        const queryParams = queryString.stringify(editComp);
-        res.redirect(`/update.html?${queryParams}`);
+        // if (!editComp) {
+        //     const message = 'Component not found';
+        //     res.setHeader('Content-Type', 'application/json');
+        //     res.json(message);
+        // }
+        // else {
+        //     const queryParams = queryString.stringify(editComp);
+        //     res.redirect(`/update.html?${queryParams}`);
+        // }
     }
     catch (error) {
         res.send(error)

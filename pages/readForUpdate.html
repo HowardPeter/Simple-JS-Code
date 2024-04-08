@@ -13,14 +13,22 @@
         <input type="text" id="id" name="id"><br><br>
 
         <label for="name">Name: </label>
-        <input type="text" id="name" name="name" placeholder="Search by Name..."><br><br>
+        <input type="text" id="name" name="name"><br><br>
 
         <label for="supplier">Supplier: </label>
-        <input type="text" id="supplier" name="supplier" placeholder="Search by Supplier..."><br><br>
+        <input type="text" id="supplier" name="supplier"><br><br>
 
         <button type="submit">Submit</button>
         <button type="reset">Refresh</button>
     </form>
 </body>
+<!-- <script>
+    fetch('/read/update', {
+        method: 'get',
+        headers: { 'Content-Type': 'application/json' },
+    })
+        .then(res => res.json())
+        .then(data => alert(data.message))
+</script> -->
 
 </html>

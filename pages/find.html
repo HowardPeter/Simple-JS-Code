@@ -23,28 +23,21 @@
             <button type="submit">Search</button>
         </form>
     </div>
-    <div class="tableProduct">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Supplier</th>
-                    <th>Price</th>
-                    <th>Units on Stock</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-        </table>
+    <div id="tableProduct">
+        
     </div>
-
 </body>
+<script>
+    fetch('/read', {
+            method: 'get',
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(response => response.json())
+            .then(data => alert(data.table))
+            .catch(error => {
+                console.error(error);
+                alert('An error occurred!');
+            });
+</script>
 
 </html>
