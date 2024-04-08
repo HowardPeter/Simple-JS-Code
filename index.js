@@ -116,7 +116,7 @@ app.get('/read', async (req, res) => {
         res.send(error)
     }
     finally {
-        await client.close();
+        await client.close()
     }
 })
 
