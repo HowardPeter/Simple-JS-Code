@@ -127,15 +127,26 @@ app.get('/read/update', async (req, res) => {
     const id = req.query.id;
     const name = req.query.name;
     const sup = req.query.supplier;
-    const query = { id: { $regex: id, $options: 'i' } }
+
     try {
         await client.connect();
         compsCollection = client.db(myDB).collection(collectionComp);
 
+        const query = {};
+        if (id) {
+            query.id = { $regex: id, $options: 'i' }
+        }
+        if (name) {
+            query.name = { $regex: name, $options: 'i' };
+        }
+        if (sup) {
+            query.supplier = { $regex: sup, $options: 'i' };
+        }
+
         editComp = await compsCollection.findOne(query);
 
         const queryParams = queryString.stringify(editComp);
-        res.redirect(`/pages/update.html?${queryParams}`);
+        res.redirect(`/update.html?${queryParams}`);
     }
     catch (error) {
         res.send(error)
@@ -144,7 +155,7 @@ app.get('/read/update', async (req, res) => {
     }
 })
 
-app.get('/update', async (req, res) => {
+app.put('/update', async (req, res) => {
     try {
         await client.connect();
         compsCollection = client.db(myDB).collection(collectionComp);
@@ -155,7 +166,7 @@ app.get('/update', async (req, res) => {
 
         await compsCollection.updateOne({ id: update_id }, updateQuery);
         const message = `Component with ID ${update_id} updated successfully.`
-        res.json({message: message});
+        res.json({ message: message });
     } catch (error) {
         res.send(error)
     }
