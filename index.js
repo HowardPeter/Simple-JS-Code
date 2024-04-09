@@ -9,7 +9,6 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path');
 const queryString = require('querystring');
-const { table } = require('console');
 const app = express()
 const port = 3000
 let compsCollection;
@@ -49,34 +48,43 @@ function outputComponents(computer_components) {
     return htmlTable;
 }
 
-function getNewID(list_comps) {
-    let maxID = 0;
-
-    for (let i = 0; i < list_comps.length; i++) {
-        const componentID = parseInt(list_comps[i].id.substring(4))
-        if (componentID > maxID) {
-            maxID = componentID
-        }
-    }
-    const newID = 'COMP' + String(maxID + 1).padStart(4, '0')
-    return newID;
-}
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/pages/home.html')
 });
 
+async function getNewID(client, dbName, collectionName) {
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+
+    const lastestComp = await collection.find().sort({ id: -1 }).limit(1).toArray();
+    if (lastestComp.length === 0) {
+        return 1;
+    } else {
+        const lastID = lastestComp[0].id;
+        const nextID = parseInt(lastID.replace("COMP", "")) + 1;
+        return nextID;
+    }
+}
 // create new component
 app.post('/insert', async (req, res) => {
     try {
         await client.connect();
 
         compsCollection = client.db(myDB).collection(collectionComp);
-        // const newID = getNewID(components);
+        const newID = await getNewID(client, myDB, collectionComp);
         const newComps = req.body;
-
-        await compsCollection.insertMany(newComps);
-        const message = `${newComps.length} components is added successfully`;
+        const newCompsWithID = newComps.map(comp => {
+            return {
+                id: `COMP${newID}`,
+                name: comp.name,
+                supplier: comp.supplier,
+                price: comp.price,
+                unitonstock: comp.unitonstock
+            };
+        });
+        await compsCollection.insertMany(newCompsWithID);
+        const message = `${newComps.length} components is added successfully ${newID}`;
 
         res.json({ message: message });
     } catch (error) {
@@ -115,7 +123,7 @@ app.get('/read', async (req, res) => {
         }
         const result = await compsCollection.find(query).toArray();
         const htmlTable = outputComponents(result);
-        res.json({table: htmlTable});
+        res.json({ table: htmlTable });
     } catch (error) {
         res.send(error)
     }
@@ -146,15 +154,15 @@ app.get('/read/update', async (req, res) => {
 
         editComp = await compsCollection.findOne(query);
 
-        // if (!editComp) {
-        //     const message = 'Component not found';
-        //     res.setHeader('Content-Type', 'application/json');
-        //     res.json(message);
-        // }
-        // else {
-        //     const queryParams = queryString.stringify(editComp);
-        //     res.redirect(`/update.html?${queryParams}`);
-        // }
+        if (!editComp) {
+            const message = 'Component not found';
+            res.setHeader('Content-Type', 'application/json');
+            res.json(message);
+        }
+        else {
+            const queryParams = queryString.stringify(editComp);
+            res.redirect(`/update.html?${queryParams}`);
+        }
     }
     catch (error) {
         res.send(error)
