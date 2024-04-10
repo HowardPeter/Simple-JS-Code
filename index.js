@@ -13,7 +13,7 @@ const app = express()
 const port = 3000
 let compsCollection;
 
-app.use(express.static(path.join(__dirname, '/pages')));
+app.use(express.static(path.join(__dirname, '/public/pages')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -48,11 +48,6 @@ function outputComponents(computer_components) {
     return htmlTable;
 }
 
-
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/pages/home.html')
-});
-
 async function getNewID(client, dbName, collectionName) {
     const db = client.db(dbName);
     const collection = db.collection(collectionName);
@@ -66,7 +61,11 @@ async function getNewID(client, dbName, collectionName) {
         return nextID;
     }
 }
-// create new component
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/pages/home.html')
+});
+
 app.post('/insert', async (req, res) => {
     try {
         await client.connect();
@@ -101,6 +100,8 @@ app.get('/read', async (req, res) => {
         const find_sup = req.query.supplier;
         const find_minPrice = req.query.minPrice;
         const find_maxPrice = req.query.maxPrice;
+        const find_minUnit = req.query.minUnit;
+        const fin_maxUnit = req.query.maxUnit
         const query = {};
 
         await client.connect();
@@ -121,9 +122,19 @@ app.get('/read', async (req, res) => {
         } else if (!find_minPrice && find_maxPrice) {
             query.price = { $lte: parseInt(find_maxPrice) };
         }
+
+        if (find_minUnit && fin_maxUnit) {
+            query.unitonstock = { $gte: parseInt(find_minUnit), $lte: parseInt(fin_maxUnit) };
+        } else if (find_minUnit && !fin_maxUnit) {
+            query.unitonstock = { $gte: parseInt(find_minUnit) };
+        } else if (!find_minUnit && fin_maxUnit) {
+            query.unitonstock = { $lte: parseInt(fin_maxUnit) };
+        }
+
         const result = await compsCollection.find(query).toArray();
         const htmlTable = outputComponents(result);
-        res.json({ table: htmlTable });
+        // res.json({ table: htmlTable });
+        res.send(htmlTable);
     } catch (error) {
         res.send(error)
     }
