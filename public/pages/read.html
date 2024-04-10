@@ -27,16 +27,17 @@
             <input type="number" id="maxUnit" name="maxUnit" placeholder="to">
 
             <br><br><button type="submit">Search</button>
+            <button type="button" style="margin-left: 10px;"><a href="home.html">Home</a></button>
         </form>
     </div>
 </body>
-<script>
+<!-- <script>
     fetch('/read', {
         method: 'get',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' }
     })
-        .then(response => response.json())
-        .then(data => alert(data.table))
-</script>
+        .then(res => res.json())
+        .then(data => alert(data.message))
+</script> -->
 
 </html>

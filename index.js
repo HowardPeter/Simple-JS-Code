@@ -78,12 +78,12 @@ app.post('/insert', async (req, res) => {
                 id: `COMP${newID}`,
                 name: comp.name,
                 supplier: comp.supplier,
-                price: comp.price,
-                unitonstock: comp.unitonstock
+                price: parseInt(comp.price),
+                unitonstock: parseInt(comp.unitonstock)
             };
         });
         await compsCollection.insertMany(newCompsWithID);
-        const message = `${newComps.length} components is added successfully ${newID}`;
+        const message = `${newComps.length} components is added successfully`;
 
         res.json({ message: message });
     } catch (error) {
@@ -101,7 +101,7 @@ app.get('/read', async (req, res) => {
         const find_minPrice = req.query.minPrice;
         const find_maxPrice = req.query.maxPrice;
         const find_minUnit = req.query.minUnit;
-        const fin_maxUnit = req.query.maxUnit
+        const find_maxUnit = req.query.maxUnit
         const query = {};
 
         await client.connect();
@@ -123,18 +123,21 @@ app.get('/read', async (req, res) => {
             query.price = { $lte: parseInt(find_maxPrice) };
         }
 
-        if (find_minUnit && fin_maxUnit) {
-            query.unitonstock = { $gte: parseInt(find_minUnit), $lte: parseInt(fin_maxUnit) };
-        } else if (find_minUnit && !fin_maxUnit) {
+        if (find_minUnit && find_maxUnit) {
+            query.unitonstock = { $gte: parseInt(find_minUnit), $lte: parseInt(find_maxUnit) };
+        } else if (find_minUnit && !find_maxUnit) {
             query.unitonstock = { $gte: parseInt(find_minUnit) };
-        } else if (!find_minUnit && fin_maxUnit) {
-            query.unitonstock = { $lte: parseInt(fin_maxUnit) };
+        } else if (!find_minUnit && find_maxUnit) {
+            query.unitonstock = { $lte: parseInt(find_maxUnit) };
         }
 
-        const result = await compsCollection.find(query).toArray();
-        const htmlTable = outputComponents(result);
-        // res.json({ table: htmlTable });
-        res.send(htmlTable);
+        const result = await compsCollection.find(query).sort({ id: -1 }).toArray();
+        if (result.length === 0) {
+            res.send('Component not found!');
+        } else {
+            const htmlTable = outputComponents(result);
+            res.send(htmlTable);
+        }
     } catch (error) {
         res.send(error)
     }
@@ -202,16 +205,17 @@ app.put('/update', async (req, res) => {
     }
 })
 
-// delete component by name
-app.get('/delete/:name', async (req, res) => {
-    delete_name = req.params.name
+// delete component by id
+app.delete('/delete', async (req, res) => {
+    delete_id = req.body.id;
     try {
         await client.connect();
 
         compsCollection = client.db(myDB).collection(collectionComp);
-        await compsCollection.deleteMany({ name: delete_name });
+        await compsCollection.deleteOne({ id: delete_id });
 
-        res.send(`Component ${componentName} has been deleted successfully.`);
+        const message = `Component with ID:${delete_id} has been deleted successfully.`;
+        res.json({ message: message });
     } catch (error) {
         res.send(error)
     }

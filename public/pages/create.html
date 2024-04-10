@@ -29,7 +29,6 @@
         <button type="button" onclick="addComp()">Add</button><br>
         <div id="message" style="width: 5.76cm;"></div><br>
         <button type="button" onclick="submitComps()">Submit</button><br><br>
-
     </form>
 </body>
 <script>
@@ -41,6 +40,10 @@
         var u = document.getElementById("unit").value;
         var comp = { name: n, supplier: s, price: p, unitonstock: u };
 
+        if (n === '' || s === '' || p === '' || u === ''){
+            ouputMessage('Please fill in all fields.');
+            return;
+        }
         componentAray.push(comp);
         ouputMessage(`New component [${n}] is added`);
     }
@@ -59,20 +62,13 @@
                 console.error(`Error: ${err}`);
             });
     }
-    // function alertComponents(components) {
-    //     let alertMessage = '';
-    //     components.forEach(component => {
-    //         alertMessage = `Name: ${component.name}, Supplier: ${component.supplier}, Price: ${component.price}, Unit: ${component.unit}\n`;
-    //     });
-    //     alert(alertMessage);
-    // }
     function ouputMessage(message) {
         var messageElement = document.getElementById('message');
         messageElement.textContent = message;
     }
     function resetForm() {
         document.getElementById("formInfo").reset();
-        // document.getElementById("message").textContent = '';
+        document.getElementById("message").textContent = '';
         setFocus();
         components = [];
     }

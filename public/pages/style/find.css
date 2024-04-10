@@ -80,3 +80,8 @@ th {
 .search-container button:active {
     background-color: #004080;
 }
+
+.search-container button a{
+    text-decoration: none;
+    color: white;
+}
