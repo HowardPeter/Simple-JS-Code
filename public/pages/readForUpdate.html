@@ -4,19 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/readUpdate.css">
     <title>Update</title>
 </head>
 
 <body>
+    <div class="head">
+        <div id="back">
+            <a href="home.html">Home</a>
+        </div>
+        <h1>Search Updated Component</h1>
+    </div>
     <form action="/read/update" method="get">
         <label for="id">ID: </label>
-        <input type="text" id="id" name="id"><br><br>
+        <input type="text" id="id" name="id">
 
         <label for="name">Name: </label>
-        <input type="text" id="name" name="name"><br><br>
+        <input type="text" id="name" name="name">
 
         <label for="supplier">Supplier: </label>
-        <input type="text" id="supplier" name="supplier"><br><br>
+        <input type="text" id="supplier" name="supplier"><br>
 
         <button type="submit">Submit</button>
         <button type="reset">Refresh</button>
