@@ -1,0 +1,37 @@
+[
+    {
+        "id": "COMP0121",
+        "name": "Intel Core I7",
+        "supplier": "Intel",
+        "price": 250,
+        "unitonstock": 25
+    },
+    {
+        "id": "COMP0122",
+        "name": "AMD Ryzen 5",
+        "supplier": "AMD",
+        "price": 200,
+        "unitonstock": 20
+    },
+    {
+        "id": "COMP0123",
+        "name": "Nvidia GeForce RTX 3080",
+        "supplier": "Nvidia",
+        "price": 800,
+        "unitonstock": 10
+    },
+    {
+        "id": "COMP0124",
+        "name": "Samsung 1TB SSD",
+        "supplier": "Samsung",
+        "price": 150,
+        "unitonstock": 30
+    },
+    {
+        "id": "COMP0125",
+        "name": "Crucial 16GB DDR4 RAM",
+        "supplier": "Crucial",
+        "price": 80,
+        "unitonstock": 50
+    }
+]

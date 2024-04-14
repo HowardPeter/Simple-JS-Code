@@ -13,6 +13,8 @@ const app = express()
 const port = 3000
 let compsCollection;
 
+//test
+
 app.use(express.static(path.join(__dirname, '/public/pages')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
