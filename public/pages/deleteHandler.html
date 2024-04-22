@@ -28,48 +28,74 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Email</th>
+                <th>Supplier</th>
+                <th>Price</th>
+                <th>Unit on stock</th>
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody id="userTable">
+        <tbody id="componentTable">
             <!-- Dữ liệu sẽ được thêm vào đây -->
         </tbody>
     </table>
 
     <script>
-        
+        const urlParams = new URLSearchParams(window.location.search);
+        const resultData = JSON.parse(urlParams.get('results'));
 
-        // Hiển thị thông tin người dùng
-        var userTable = document.getElementById("userTable");
+        var computer_components = resultData;
 
-        users.forEach(function (user) {
+        var componentTable = document.getElementById("componentTable");
+
+        computer_components.forEach(function (component) {
             var row = document.createElement("tr");
 
             var idCell = document.createElement("td");
-            idCell.textContent = user.id;
+            idCell.textContent = component.id;
             row.appendChild(idCell);
 
             var nameCell = document.createElement("td");
-            nameCell.textContent = user.name;
+            nameCell.textContent = component.name;
             row.appendChild(nameCell);
 
-            var emailCell = document.createElement("td");
-            emailCell.textContent = user.email;
-            row.appendChild(emailCell);
+            var supplierCell = document.createElement("td");
+            supplierCell.textContent = component.supplier;
+            row.appendChild(supplierCell);
+
+            var priceCell = document.createElement("td");
+            priceCell.textContent = component.price;
+            row.appendChild(priceCell);
+
+            var unitCell = document.createElement("td");
+            unitCell.textContent = component.unitonstock;
+            row.appendChild(unitCell);
 
             var actionCell = document.createElement("td");
             var deleteLink = document.createElement("a");
             deleteLink.href = "#";
             deleteLink.textContent = "Delete";
             deleteLink.addEventListener("click", function () {
-                // Xử lý logic xóa người dùng ở đây
-                alert("Đã xóa người dùng " + user.id);
+                if (confirm("Are you sure to delete component " + component.id + "?")) {
+                    fetch("/delete/" + component.id, {
+                        method: "DELETE"
+                    })
+                        .then(function (response) {
+                            if (response.ok) {
+                                alert("Deleted component with id: " + component.name);
+                            } else {
+                                alert("Delete failed!");
+                            }
+                        })
+                        .catch(function (error) {
+                            console.error("Error:", error);
+                            alert("Error occurred!");
+                        });
+                }
             });
             actionCell.appendChild(deleteLink);
             row.appendChild(actionCell);
 
-            userTable.appendChild(row);
+            componentTable.appendChild(row);
         });
     </script>
 </body>
