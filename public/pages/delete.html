@@ -4,34 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/readUpdate.css">
     <title>Delete Component</title>
 </head>
-
-<body>
+<style>
+    .result{
+        width: 1000px;
+        height: 200px;
+        margin: 30px auto;
+        border: 1px solid red;
+    }
+</style>
+<body onload="setFocus()">
     <div id="back">
         <a href="home.html">Home</a>
     </div>
     <h1>Delete Component</h1>
-    <form id="deleteForm">
-        <label for="id">ID:</label>
-        <input type="text" id="id" name="id" required>
+    <form action="/readDelete" method="GET">
+        <label for="id">ID: </label>
+        <input type="text" id="id" name="id">
 
-        <button type="submit">Delete</button><br>
+        <label for="name">Name: </label>
+        <input type="text" id="name" name="name">
+
+        <label for="supplier">Supplier: </label>
+        <input type="text" id="supplier" name="supplier"><br>
+
+        <button type="submit">Submit</button>
+        <button type="reset">Refresh</button>
     </form>
 </body>
 <script>
-    var id = document.getElementById("id").value;
-
-    fetch(`/delete`, {
-        method: 'delete',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(id)
-    })
-        .then(response => response.json())
-        .then(jsonData => {
-            alert(jsonData.message);
-        })
+    function setFocus() {
+        document.getElementById("id").focus();
+    }
 </script>
 
 </html>

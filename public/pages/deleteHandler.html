@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Deleted Component List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Deleted Component List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="userTable">
+            <!-- Dữ liệu sẽ được thêm vào đây -->
+        </tbody>
+    </table>
+
+    <script>
+        
+
+        // Hiển thị thông tin người dùng
+        var userTable = document.getElementById("userTable");
+
+        users.forEach(function (user) {
+            var row = document.createElement("tr");
+
+            var idCell = document.createElement("td");
+            idCell.textContent = user.id;
+            row.appendChild(idCell);
+
+            var nameCell = document.createElement("td");
+            nameCell.textContent = user.name;
+            row.appendChild(nameCell);
+
+            var emailCell = document.createElement("td");
+            emailCell.textContent = user.email;
+            row.appendChild(emailCell);
+
+            var actionCell = document.createElement("td");
+            var deleteLink = document.createElement("a");
+            deleteLink.href = "#";
+            deleteLink.textContent = "Delete";
+            deleteLink.addEventListener("click", function () {
+                // Xử lý logic xóa người dùng ở đây
+                alert("Đã xóa người dùng " + user.id);
+            });
+            actionCell.appendChild(deleteLink);
+            row.appendChild(actionCell);
+
+            userTable.appendChild(row);
+        });
+    </script>
+</body>
+
+</html>

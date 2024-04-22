@@ -8,7 +8,7 @@
     <title>Product Table</title>
 </head>
 
-<body>
+<body onload="setFocus()">
     <div class="search-container">
         <h2>Search Component</h2>
         <form action="/read" method="GET">
@@ -31,13 +31,10 @@
         </form>
     </div>
 </body>
-<!-- <script>
-    fetch('/read', {
-        method: 'get',
-        headers: { 'Content-Type': 'application/json' }
-    })
-        .then(res => res.json())
-        .then(data => alert(data.message))
-</script> -->
+<script>
+    function setFocus() {
+        document.getElementById("name").focus();
+    }
+</script>
 
 </html>

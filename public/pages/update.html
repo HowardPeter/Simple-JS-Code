@@ -8,9 +8,9 @@
     <title>Update Component</title>
 </head>
 
-<body>
+<body onload="setFocus()">
     <div id="back">
-        <a href="home.html">Home</a>
+        <a href="readForUpdate.html">Back</a>
     </div>
     <h1>Update Component</h1>
     <form id="updateForm">
@@ -60,6 +60,9 @@
                 console.error(error);
                 alert('An error occurred!');
             });
+    }
+    function setFocus() {
+        document.getElementById("name").focus();
     }
 </script>
 

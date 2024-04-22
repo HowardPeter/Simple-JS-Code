@@ -41,13 +41,61 @@ function outputComponents(computer_components) {
                         <td>${component.supplier}</td>
                         <td style="text-align: center;">${component.price}$</td>
                         <td style="text-align: center;">${component.unitonstock}</td>
-                        <td style="text-align: center;"><img src="/${component.image}" alt="" width = 80px></td>
+                        <td style="text-align: center;"><img src="${component.image}" alt="" width = 80px></td>
                     </tr>`;
     });
     htmlTable += '</table>'
     return htmlTable;
 }
 
+function deleteOutputs(computer_components) {
+    let htmlTable = ``
+    htmlTable += `<style>
+                        table {
+                            border-collapse: collapse;
+                            width: 100%;
+                        }
+                        th, td {
+                            border: 1.2px solid #dddddd;
+                            padding: 8px;
+                        }
+                        th {
+                            background-color: #bebebe;
+                            text-align: center;
+                        }
+                        button{
+                            border: 0;
+                            background-color: transparent;
+                            cursor: pointer;
+                            color: #004080;
+                            font-size: 15px;
+                        }
+                        button:hover {
+                            color: blueviolet;
+                        }
+                    </style>`
+    htmlTable += '<table border="1">';
+    htmlTable += '<tr><th>ID</th><th>Name</th><th>Supplier</th><th>Price</th><th>Units on Stock</th><th>Image</th><th>Action</th></tr>';
+    computer_components.forEach(component => {
+        htmlTable += `<tr><td style="text-align: center;">${component.id}</td>
+                        <td>${component.name}</td>
+                        <td>${component.supplier}</td>
+                        <td style="text-align: center;">${component.price}$</td>
+                        <td style="text-align: center;">${component.unitonstock}</td>
+                        <td style="text-align: center;"><img src="${component.image}" alt="" width = 80px></td>
+                        <td style="text-align: center;"><a href="/public/pages/deleteHandler.html"></td>
+                    </tr>`;
+    });
+    htmlTable += '</table>'
+    htmlTable += '<button style="margin-top: 20px; margin-bottom: 10px; margin-left: 94%;">Delete All</button>'
+    return htmlTable;
+}
+async function deleteComp(id) {
+    await client.connect();
+    compsCollection = client.db(myDB).collection(collectionComp);
+
+    await compsCollection.deleteOne(id);
+}
 async function getNewID(client, dbName, collectionName) {
     const db = client.db(dbName);
     const collection = db.collection(collectionName);
@@ -166,12 +214,11 @@ app.get('/read/update', async (req, res) => {
             query.supplier = { $regex: sup, $options: 'i' };
         }
 
-        editComp = await compsCollection.findOne(query);
+        const editComp = await compsCollection.findOne(query);
 
         if (!editComp) {
             const message = 'Component not found';
-            res.setHeader('Content-Type', 'application/json');
-            res.json(message);
+            res.send(message);
         }
         else {
             const queryParams = queryString.stringify(editComp);
@@ -205,17 +252,33 @@ app.put('/update', async (req, res) => {
     }
 })
 
-// delete component by id
-app.delete('/delete', async (req, res) => {
-    delete_id = req.body.id;
+app.get('/readDelete', async (req, res) => {
+    const delete_id = req.query.id;
+    const delete_name = req.query.name;
+    const delete_sup = req.query.supplier;
     try {
         await client.connect();
-
         compsCollection = client.db(myDB).collection(collectionComp);
-        await compsCollection.deleteOne({ id: delete_id });
 
-        const message = `Component with ID:${delete_id} has been deleted successfully.`;
-        res.json({ message: message });
+        const query = {};
+        if (delete_id) {
+            query.id = { $regex: delete_id, $options: 'i' }
+        }
+        if (delete_name) {
+            query.name = { $regex: delete_name, $options: 'i' };
+        }
+        if (delete_sup) {
+            query.supplier = { $regex: delete_sup, $options: 'i' };
+        }
+
+        const result = await compsCollection.find(query).sort({ id: -1 }).toArray();
+
+        if (!result) {
+            res.send("Component not found!");
+        } else {
+            const queryParams = queryString.stringify(result);
+            res.redirect(`/deleteHandler.html?${queryParams}`);
+        }
     } catch (error) {
         res.send(error)
     }
