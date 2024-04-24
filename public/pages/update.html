@@ -7,11 +7,15 @@
     <link rel="stylesheet" href="style/style.css">
     <title>Update Component</title>
 </head>
-
+<style>
+</style>
 <body onload="setFocus()">
-    <div id="back">
-        <a href="readForUpdate.html">Back</a>
-    </div>
+        <div class="back" style="margin-right: 10px;">
+            <a href="home.html">Home</a>
+        </div>
+        <div class="back">
+            <a href="readForUpdate.html">Back</a>
+        </div>
     <h1>Update Component</h1>
     <form id="updateForm">
         <label for="id">ID:</label>
@@ -55,11 +59,17 @@
             body: JSON.stringify(newComp)
         })
             .then(response => response.json())
-            .then(data => alert(data.message))
+            .then(data => {
+                alert(data.message);
+                backToSearch()
+            })
             .catch(error => {
                 console.error(error);
                 alert('An error occurred!');
             });
+    }
+    function backToSearch() {
+        window.location.href = 'readForUpdate.html';
     }
     function setFocus() {
         document.getElementById("name").focus();

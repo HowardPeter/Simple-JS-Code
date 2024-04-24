@@ -5,13 +5,13 @@ body {
     background-color: #f0f0f0;
 }
 
-#back {
+.back {
     display: block;
     margin-left: 10cm;
     margin-top: 2cm;
 }
 
-#back a {
+.back a {
     text-decoration: none;
     padding: 10px 25px;
     border: 2px solid black;
@@ -20,7 +20,7 @@ body {
     transition: background-color 0.2s;
 }
 
-#back a:hover {
+.back a:hover {
     background-color: black;
     color: white;
 }

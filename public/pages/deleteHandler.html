@@ -18,10 +18,42 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+
+        h1 {
+            text-align: center;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            margin-left: 10px;
+        }
+
+        .back a {
+            text-decoration: none;
+            padding: 10px 25px;
+            border: 2px solid black;
+            color: black;
+            border-radius: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .back a:hover {
+            background-color: black;
+            color: white;
+        }
     </style>
 </head>
 
 <body>
+    <div class="backButton">
+        <div class="back">
+            <a href="home.html">Home</a>
+        </div>
+        <div class="back">
+            <a href="readForUpdate.html">Back</a>
+        </div>
+    </div>
     <h1>Deleted Component List</h1>
     <table>
         <thead>
@@ -77,16 +109,19 @@
             deleteLink.addEventListener("click", function () {
                 if (confirm("Are you sure to delete component " + component.id + "?")) {
                     fetch("/delete/" + component.id, {
-                        method: "DELETE"
+                        method: "DELETE",
+                        headers: { 'Content-Type': 'application/json' }
                     })
-                        .then(function (response) {
-                            if (response.ok) {
-                                alert("Deleted component with id: " + component.name);
-                            } else {
-                                alert("Delete failed!");
-                            }
+                        .then(response => response.json())
+                        .then(data => {
+                            // if (response.ok) {
+                            //     alert("Deleted component with id: " + component.id);
+                            // } else {
+                            //     alert("Delete failed!");
+                            // }
+                            alert(data.message);
                         })
-                        .catch(function (error) {
+                        .catch(error => {
                             console.error("Error:", error);
                             alert("Error occurred!");
                         });

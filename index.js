@@ -191,7 +191,7 @@ app.put('/update', async (req, res) => {
 
         const newComp = req.body;
         const update_id = newComp.id;
-        const updateQuery = { $set: { name: newComp.name, supplier: newComp.supplier, price: newComp.price, unitonstock: newComp.unitonstock } }
+        const updateQuery = { $set: { name: newComp.name, supplier: newComp.supplier, price: parseInt(newComp.price), unitonstock: parseInt(newComp.unitonstock) } }
 
         await compsCollection.updateOne({ id: update_id }, updateQuery);
         const message = `Component with ID ${update_id} updated successfully.`
@@ -240,14 +240,17 @@ app.get('/readDelete', async (req, res) => {
 });
 
 app.delete('/delete/:id', async (req, res) => {
-    
+
     try {
         await client.connect();
         compsCollection = client.db(myDB).collection(collectionComp);
-        
+
         const id = req.params.id;
 
-        await compsCollection.deleteOne({id: id});
+        await compsCollection.deleteOne({ id: id });
+
+        const message = `Component with ID ${id} deleted successfully.`
+        res.json({ message: message });
     } catch (error) {
         res.send(error)
     }

@@ -54,12 +54,12 @@ button:hover {
 button:active {
     background-color: #004080;
 }
-#back {
+.back {
     display: inline-block;
     margin-top: -11cm;
 }
 
-#back a {
+.back a {
     text-decoration: none;
     padding: 10px 25px;
     border: 2px solid black;
@@ -68,7 +68,7 @@ button:active {
     transition: background-color 0.3s;
 }
 
-#back a:hover {
+.back a:hover {
     background-color: black;
     color: white;
 }
