@@ -9,6 +9,9 @@
 </head>
 
 <body onload="setFocus()">
+    <div class="back">
+        <a href="home.html">Home</a>
+    </div>
     <div class="search-container">
         <h2>Search Component</h2>
         <form action="/read" method="GET">
@@ -27,7 +30,6 @@
             <input type="number" id="maxUnit" name="maxUnit" placeholder="to">
 
             <br><br><button type="submit">Search</button>
-            <button type="button" style="margin-left: 10px;"><a href="home.html">Home</a></button>
             <button type="reset" style="margin-left: 10px;" onclick="setFocus()">Refresh</button>
         </form>
     </div>
