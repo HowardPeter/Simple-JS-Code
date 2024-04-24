@@ -42,6 +42,12 @@
             background-color: black;
             color: white;
         }
+
+        .deleteAll {
+            text-align: right;
+            margin-top: 15px;
+            margin-right: 2cm;
+        }
     </style>
 </head>
 
@@ -70,69 +76,89 @@
             <!-- Dữ liệu sẽ được thêm vào đây -->
         </tbody>
     </table>
-
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const resultData = JSON.parse(urlParams.get('results'));
-
-        var computer_components = resultData;
-
-        var componentTable = document.getElementById("componentTable");
-
-        computer_components.forEach(function (component) {
-            var row = document.createElement("tr");
-
-            var idCell = document.createElement("td");
-            idCell.textContent = component.id;
-            row.appendChild(idCell);
-
-            var nameCell = document.createElement("td");
-            nameCell.textContent = component.name;
-            row.appendChild(nameCell);
-
-            var supplierCell = document.createElement("td");
-            supplierCell.textContent = component.supplier;
-            row.appendChild(supplierCell);
-
-            var priceCell = document.createElement("td");
-            priceCell.textContent = component.price;
-            row.appendChild(priceCell);
-
-            var unitCell = document.createElement("td");
-            unitCell.textContent = component.unitonstock;
-            row.appendChild(unitCell);
-
-            var actionCell = document.createElement("td");
-            var deleteLink = document.createElement("a");
-            deleteLink.href = "#";
-            deleteLink.textContent = "Delete";
-            deleteLink.addEventListener("click", function () {
-                if (confirm("Are you sure to delete component " + component.id + "?")) {
-                    fetch("/delete/" + component.id, {
-                        method: "DELETE",
-                        headers: { 'Content-Type': 'application/json' }
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            // if (response.ok) {
-                            //     alert("Deleted component with id: " + component.id);
-                            // } else {
-                            //     alert("Delete failed!");
-                            // }
-                            alert(data.message);
-                        })
-                        .catch(error => {
-                            console.error("Error:", error);
-                            alert("Error occurred!");
-                        });
-                }
-            });
-            actionCell.appendChild(deleteLink);
-            row.appendChild(actionCell);
-
-            componentTable.appendChild(row);
-        });
-    </script>
+    <div class="deleteAll">
+        <a href="" onclick="deleteAll()">Delete All</a>
+    </div>
 </body>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const resultData = JSON.parse(urlParams.get('results'));
+
+    var computer_components = resultData;
+
+    var componentTable = document.getElementById("componentTable");
+
+    computer_components.forEach(function (component) {
+        var row = document.createElement("tr");
+
+        var idCell = document.createElement("td");
+        idCell.textContent = component.id;
+        row.appendChild(idCell);
+
+        var nameCell = document.createElement("td");
+        nameCell.textContent = component.name;
+        row.appendChild(nameCell);
+
+        var supplierCell = document.createElement("td");
+        supplierCell.textContent = component.supplier;
+        row.appendChild(supplierCell);
+
+        var priceCell = document.createElement("td");
+        priceCell.textContent = component.price;
+        row.appendChild(priceCell);
+
+        var unitCell = document.createElement("td");
+        unitCell.textContent = component.unitonstock;
+        row.appendChild(unitCell);
+
+        var actionCell = document.createElement("td");
+        var deleteLink = document.createElement("a");
+        deleteLink.href = "#";
+        deleteLink.textContent = "Delete";
+        deleteLink.addEventListener("click", function () {
+            if (confirm("Are you sure to delete component " + component.id + "?")) {
+                fetch("/delete/" + component.id, {
+                    method: "DELETE",
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // if (response.ok) {
+                        //     alert("Deleted component with id: " + component.id);
+                        // } else {
+                        //     alert("Delete failed!");
+                        // }
+                        alert(data.message);
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("Error occurred!");
+                    });
+            }
+        });
+        actionCell.appendChild(deleteLink);
+        row.appendChild(actionCell);
+
+        componentTable.appendChild(row);
+    });
+
+    function deleteAll()
+    {
+        if (confirm("Are you sure to delete all component ?")) {
+                fetch("/delete/all", {
+                    method: "DELETE",
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("Error occurred!");
+                    });
+            }
+    }
+</script>
 
 </html>

@@ -34,14 +34,13 @@ function outputComponents(computer_components) {
                         }
                     </style>`
     htmlTable += '<table border="1">';
-    htmlTable += '<tr><th>ID</th><th>Name</th><th>Supplier</th><th>Price</th><th>Units on Stock</th><th>Image</th></tr>';
+    htmlTable += '<tr><th>ID</th><th>Name</th><th>Supplier</th><th>Price</th><th>Units on Stock</th></tr>';
     computer_components.forEach(component => {
         htmlTable += `<tr><td style="text-align: center;">${component.id}</td>
                         <td>${component.name}</td>
                         <td>${component.supplier}</td>
                         <td style="text-align: center;">${component.price}$</td>
                         <td style="text-align: center;">${component.unitonstock}</td>
-                        <td style="text-align: center;"><img src="${component.image}" alt="" width = 80px></td>
                     </tr>`;
     });
     htmlTable += '</table>'
@@ -228,6 +227,7 @@ app.get('/readDelete', async (req, res) => {
         if (!result) {
             res.send("Component not found!");
         } else {
+            console.log(result);
             const queryParams = new URLSearchParams({ results: JSON.stringify(result) }).toString();
             res.redirect(`/deleteHandler.html?${queryParams}`);
         }
@@ -240,7 +240,6 @@ app.get('/readDelete', async (req, res) => {
 });
 
 app.delete('/delete/:id', async (req, res) => {
-
     try {
         await client.connect();
         compsCollection = client.db(myDB).collection(collectionComp);
@@ -249,7 +248,26 @@ app.delete('/delete/:id', async (req, res) => {
 
         await compsCollection.deleteOne({ id: id });
 
-        const message = `Component with ID ${id} deleted successfully.`
+        const message = `Component with ID: ${id} deleted successfully.`
+        res.json({ message: message });
+    } catch (error) {
+        res.send(error)
+    }
+    finally {
+        await client.close();
+    }
+})
+
+app.delete('/delete/all/:id', async (req, res) => {
+    try {
+        await client.connect();
+        compsCollection = client.db(myDB).collection(collectionComp);
+
+        const id = req.params.id;
+
+        await compsCollection.deleteMany({id: {$in: id}});
+
+        const message = `Component with ID: ${id} deleted successfully.`;
         res.json({ message: message });
     } catch (error) {
         res.send(error)
