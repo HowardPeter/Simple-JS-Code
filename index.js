@@ -227,7 +227,6 @@ app.get('/readDelete', async (req, res) => {
         if (!result) {
             res.send("Component not found!");
         } else {
-            console.log(result);
             const queryParams = new URLSearchParams({ results: JSON.stringify(result) }).toString();
             res.redirect(`/deleteHandler.html?${queryParams}`);
         }
@@ -258,16 +257,16 @@ app.delete('/delete/:id', async (req, res) => {
     }
 })
 
-app.delete('/delete/all/:id', async (req, res) => {
+app.delete('/deleteAll', async (req, res) => {
     try {
         await client.connect();
         compsCollection = client.db(myDB).collection(collectionComp);
+        
+        const deleted_comps = req.body;
 
-        const id = req.params.id;
+        await compsCollection.deleteMany({ id: { $in: deleted_comps.map(comp => comp.id) } });
 
-        await compsCollection.deleteMany({id: {$in: id}});
-
-        const message = `Component with ID: ${id} deleted successfully.`;
+        const message = 'Delete all searched components successfully.';
         res.json({ message: message });
     } catch (error) {
         res.send(error)

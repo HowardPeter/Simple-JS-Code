@@ -11,7 +11,7 @@
 
         th,
         td {
-            text-align: left;
+            text-align: center;
             padding: 8px;
         }
 
@@ -46,7 +46,7 @@
         .deleteAll {
             text-align: right;
             margin-top: 15px;
-            margin-right: 2cm;
+            margin-right: 30px;
         }
     </style>
 </head>
@@ -57,10 +57,10 @@
             <a href="home.html">Home</a>
         </div>
         <div class="back">
-            <a href="readForUpdate.html">Back</a>
+            <a href="delete.html">Back</a>
         </div>
     </div>
-    <h1>Deleted Component List</h1>
+    <h1>Delete Component List</h1>
     <table>
         <thead>
             <tr>
@@ -77,7 +77,7 @@
         </tbody>
     </table>
     <div class="deleteAll">
-        <a href="" onclick="deleteAll()">Delete All</a>
+        <a href="">Delete All</a>
     </div>
 </body>
 <script>
@@ -104,7 +104,7 @@
         row.appendChild(supplierCell);
 
         var priceCell = document.createElement("td");
-        priceCell.textContent = component.price;
+        priceCell.textContent = component.price + "$";
         row.appendChild(priceCell);
 
         var unitCell = document.createElement("td");
@@ -115,7 +115,7 @@
         var deleteLink = document.createElement("a");
         deleteLink.href = "#";
         deleteLink.textContent = "Delete";
-        deleteLink.addEventListener("click", function () {
+        deleteLink.addEventListener("click", function (event) {
             if (confirm("Are you sure to delete component " + component.id + "?")) {
                 fetch("/delete/" + component.id, {
                     method: "DELETE",
@@ -142,23 +142,26 @@
         componentTable.appendChild(row);
     });
 
-    function deleteAll()
-    {
-        if (confirm("Are you sure to delete all component ?")) {
-                fetch("/delete/all", {
-                    method: "DELETE",
-                    headers: { 'Content-Type': 'application/json' }
+    document.querySelector('.deleteAll a').addEventListener('click', function (event) {
+        event.preventDefault();
+
+        if (confirm("Are you sure you want to delete all components?")) {
+            fetch("/deleteAll", {
+                method: "DELETE",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(computer_components)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert(data.message);
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        alert("Error occurred!");
-                    });
-            }
-    }
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Error occurred!");
+                });
+        }
+    });
+
 </script>
 
 </html>
