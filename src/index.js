@@ -13,7 +13,7 @@ const app = express()
 const port = 3000
 let compsCollection;
 
-app.use(express.static(path.join(__dirname, '/public/pages')));
+app.use(express.static(path.join(__dirname, '../public/pages')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -62,7 +62,7 @@ async function getNewID(client, dbName, collectionName) {
 }
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/pages/home.html')
+    res.sendFile(__dirname + '../public/pages/home.html')
 });
 
 app.post('/insert', async (req, res) => {
