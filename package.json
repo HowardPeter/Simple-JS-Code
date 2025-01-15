@@ -1,6 +1,29 @@
 {
-  "description": "",
   "dependencies": {
     "mongodb": "^6.5.0"
-  }
+  },
+  "name": "simple-js-code",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "webpack": "^5.97.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HowardPeter/Simple-JS-Code.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/HowardPeter/Simple-JS-Code/issues"
+  },
+  "homepage": "https://github.com/HowardPeter/Simple-JS-Code#readme",
+  "description": ""
 }
